@@ -4,18 +4,22 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { KeycloakAngularModule, KeycloakService } from 'keycloak-angular';
+import { ProduitComponent } from './produit/produit.component';
+import { CategorieComponent } from './categorie/categorie.component';
+import { NavbarComponent } from './navbar/navbar.component';
+import { HomeComponent } from './home/home.component';
 /*Cette fonction permet de demarer keycloak au demarage*/
 export function kcFactory(kycloakService: KeycloakService) {
   /*Return une promesse*/
   return () => {
     kycloakService.init({
       config: {
-        realm: "Wallet-realm",
+        realm: "wallet-realm",
         clientId: "wallet-client",
         url: "http://localhost:8080"
       },
       initOptions: {
-        onLoad: "login-required",
+        onLoad: "check-sso",
         checkLoginIframe: true
       }
     }
@@ -26,7 +30,11 @@ export function kcFactory(kycloakService: KeycloakService) {
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    ProduitComponent,
+    CategorieComponent,
+    NavbarComponent,
+    HomeComponent
   ],
   imports: [
     BrowserModule,
