@@ -10,7 +10,7 @@ export function kcFactory(kycloakService: KeycloakService) {
   return () => {
     kycloakService.init({
       config: {
-        realm: "wallet-realm",
+        realm: "Wallet-realm",
         clientId: "wallet-client",
         url: "http://localhost:8080"
       },
