@@ -26,7 +26,7 @@ export class SecurityService {
   }
 
   /*Recupere les roles des users*/
-  public hasRoleIn(roles: string[]) {
+  public hasRoleIn(roles: string[]):boolean {
     let userRoles = this.keycloakService.getUserRoles();
     for (let role of roles) {
       if (userRoles.includes(role)) return true;
