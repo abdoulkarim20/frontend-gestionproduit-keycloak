@@ -4,6 +4,7 @@ import { ProduitComponent } from './produit/produit.component';
 import { AuthGuard } from './guards/security.guard';
 import { CategorieComponent } from './categorie/categorie.component';
 import { HomeComponent } from './home/home.component';
+import { ForbiddenComponent } from './forbidden/forbidden.component';
 
 const routes: Routes = [
   {
@@ -11,11 +12,16 @@ const routes: Routes = [
   },
   {
     path: 'produits', component: ProduitComponent,
-    canActivate: [AuthGuard], data: { roles: ['ADMIN', 'USER'] }
+    canActivate: [AuthGuard],
+    data: { roles: ['USER', 'ADMIN'] }
   },
   {
     path: 'categories', component: CategorieComponent,
-    canActivate: [AuthGuard], data: { roles: ['ADMIN'] }
+    canActivate: [AuthGuard],
+    data: { roles: ['ADMIN'] }
+  },
+  {
+    path: 'forbidden', component: ForbiddenComponent
   }
 ];
 

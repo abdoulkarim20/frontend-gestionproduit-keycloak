@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { SecurityService } from '../security/security.service';
 
 @Component({
   selector: 'app-navbar',
@@ -7,9 +8,22 @@ import { Component, OnInit } from '@angular/core';
 })
 export class NavbarComponent implements OnInit {
 
-  constructor() { }
+  constructor(public securityService: SecurityService) { }
 
   ngOnInit(): void {
+    console.log("L'utilisateur connecter:");
+  }
+
+  /*Login*/
+  async login() {
+    await this.securityService.keycloakService.login({
+      redirectUri: window.location.origin
+    })
+  }
+
+  /*Se deconnecter*/
+  onLogout() {
+    this.securityService.keycloakService.logout(window.location.origin);
   }
 
 }

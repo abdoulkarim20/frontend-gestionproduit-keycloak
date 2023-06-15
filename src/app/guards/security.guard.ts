@@ -10,36 +10,34 @@ import { KeycloakAuthGuard, KeycloakService } from 'keycloak-angular';
     providedIn: 'root'
 })
 export class AuthGuard extends KeycloakAuthGuard {
-    constructor(
-        protected override readonly router: Router,
-        protected readonly keycloak: KeycloakService
-    ) {
-        super(router, keycloak);
+    constructor(protected override router: Router, protected override keycloakAngular: KeycloakService) {
+        super(router, keycloakAngular);
     }
 
-    public async isAccessAllowed(
-        route: ActivatedRouteSnapshot,
-        state: RouterStateSnapshot
-    ) {
-        // Force the user to log in if currently unauthenticated.
-        if (!this.authenticated) {
-            await this.keycloak.login({
-                /*redirectUri: window.location.origin + state.url*/
-                /*On peux remplacer le state.url par notre propore adresse de login*/
-
-                redirectUri: window.location.origin /*Redirige vers l'url de l'application ex:localhost:4200*/
-            });
-        }
-
-        // Get the roles required from the route.
-        const requiredRoles = route.data['roles'];/*permet de recuperer les roles a partir de la route*/
-
-        // Allow the user to proceed if no additional roles are required to access the route.
-        if (!(requiredRoles instanceof Array) || requiredRoles.length === 0) {
-            return true;
-        }
-
-        // Allow the user to proceed if all the required roles are present.
-        return requiredRoles.every((role) => this.roles.includes(role));
+    isAccessAllowed(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Promise<boolean> {
+        return new Promise(async (resolve) => {
+            if (!this.authenticated) {
+                this.keycloakAngular.login();
+                return;
+            }
+            console.log('role restriction given at app-routing.module for this route', route.data['roles']);
+            console.log('User roles coming after login from keycloak :', this.roles);
+            const requiredRoles = route.data['roles'];
+            let granted: boolean = false;
+            if (!requiredRoles || requiredRoles.length === 0) {
+                granted = true;
+            } else {
+                for (const requiredRole of requiredRoles) {
+                    if (this.roles.indexOf(requiredRole) > -1) {
+                        granted = true;
+                        break;
+                    }
+                }
+            }
+            if (granted === false) {
+                this.router.navigate(['/forbidden']);
+            }
+            resolve(granted);
+        });
     }
 }

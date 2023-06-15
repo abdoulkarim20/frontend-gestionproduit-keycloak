@@ -20,7 +20,22 @@
             </ul>
             <div style="display: flex;justify-content: flex-end; padding-right: 2rem;">
                 <a class="navbar-brand" routerLink="/"><span style="font-size: 14px;"></span></a>
-                <a class="navbar-brand" routerLink="/"><span style="font-size: 14px;">Abdoul Karim DIALLO</span></a>
+                <!-- En cas si un user est connecter -->
+                <div class="dropdown mx-3" *ngIf="securityService.profile">
+                    <button class="btn btn-secondary" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        {{securityService.profile.firstName}}
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" style="cursor: pointer;">Mon Profil</a></li>
+                        <li><a class="dropdown-item" style="cursor: pointer;" (click)="onLogout()">Déconnexion</a></li>
+                    </ul>
+                </div>
+                <!-- En ca si un user n'est pas connecter -->
+                <div class="dropdown">
+                    <button class="btn btn-secondary" (click)="login()" type="button">
+                        Connexion
+                    </button>
+                </div>
             </div>
         </div>
     </div>
